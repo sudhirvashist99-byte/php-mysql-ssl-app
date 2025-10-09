@@ -29,7 +29,7 @@ services:
       - ./ssl:/etc/nginx/ssl
     depends_on:
       - phpservice
-    restart: unless-stopped
+    restart: always
     
   #dbservice:
     #container_name: dbcontainer
