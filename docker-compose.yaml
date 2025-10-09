@@ -6,15 +6,31 @@ services:
     image: phpapp:latest
     container_name: php-crud-app
     restart: always
-    ports:
-      - "8080:80"
+    #ports:
+    #  - "8080:80"
+    expose:
+      - "80"  # Nginx will use this
     volumes:
       - ./src:/var/www/html
     env_file:
       - .env  
     depends_on:
       - dbservice
+ 
 
+  nginx:
+    image: nginx:latest
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - phpservice
+    restart: unless-stopped
+    
   dbservice:
     container_name: dbcontainer
     image: mysql:8.0
