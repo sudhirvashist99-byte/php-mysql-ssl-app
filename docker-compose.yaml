@@ -1,0 +1,44 @@
+version: "3.8"
+services:
+  phpservice:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: phpapp:latest
+    container_name: php-crud-app
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/var/www/html
+    env_file:
+      - .env  
+    depends_on:
+      - dbservice
+
+  dbservice:
+    container_name: dbcontainer
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: test_db
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: testpass
+    volumes:
+      - ./db_data:/var/lib/mysql
+      - ./db_init:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+
+  phpmyadminservice:
+    container_name: phpmyadmincontainer
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: dbservice
+      MYSQL_ROOT_PASSWORD: rootpass
+    depends_on:
+      - dbservice
