@@ -14,8 +14,8 @@ services:
       - ./src:/var/www/html
     env_file:
       - .env  
-    depends_on:
-      - dbservice
+    #depends_on:
+      #- dbservice
  
 
   nginx:
@@ -31,29 +31,29 @@ services:
       - phpservice
     restart: unless-stopped
     
-  dbservice:
-    container_name: dbcontainer
-    image: mysql:8.0
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: test_db
-      MYSQL_USER: testuser
-      MYSQL_PASSWORD: testpass
-    volumes:
-      - ./db_data:/var/lib/mysql
-      - ./db_init:/docker-entrypoint-initdb.d
-    ports:
-      - "3306:3306"
+  #dbservice:
+    #container_name: dbcontainer
+    #image: mysql:8.0
+    #restart: always
+    #environment:
+      #MYSQL_ROOT_PASSWORD: rootpass
+      #MYSQL_DATABASE: test_db
+      #MYSQL_USER: testuser
+      #MYSQL_PASSWORD: testpass
+    #volumes:
+      #- ./db_data:/var/lib/mysql
+      #- ./db_init:/docker-entrypoint-initdb.d
+    #ports:
+      #- "3306:3306"
 
-  phpmyadminservice:
-    container_name: phpmyadmincontainer
-    image: phpmyadmin/phpmyadmin
-    restart: always
-    ports:
-      - "8081:80"
-    environment:
-      PMA_HOST: dbservice
-      MYSQL_ROOT_PASSWORD: rootpass
-    depends_on:
-      - dbservice
+  #phpmyadminservice:
+    #container_name: phpmyadmincontainer
+    #image: phpmyadmin/phpmyadmin
+    #restart: always
+    #ports:
+      #- "8081:80"
+    #environment:
+      #PMA_HOST: dbservice
+      #MYSQL_ROOT_PASSWORD: rootpass
+    #depends_on:
+      #- dbservice
